@@ -1,7 +1,7 @@
 terraform {
   backend "s3" {
     bucket = "wbeuil-tf-backend"
-    key    = "terraform.tfstate"
+    key    = "wbeuil.com/terraform.tfstate"
     region = "eu-west-3"
   }
 }
