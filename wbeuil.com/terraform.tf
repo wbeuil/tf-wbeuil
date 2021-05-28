@@ -55,3 +55,11 @@ resource "aws_route53_record" "gsv_record" {
   zone_id = aws_route53_zone.wbeuil_zone.zone_id
   records = ["google-site-verification=5frvSVU61KI556iqZnxfMPdz2ZZi2t22sCSPNUGBYVg"]
 }
+
+resource "aws_route53_record" "a_record_plausible" {
+  name    = "analytics"
+  type    = "A"
+  ttl     = 300
+  zone_id = aws_route53_zone.wbeuil_zone.zone_id
+  records = ["15.237.113.179"]
+}

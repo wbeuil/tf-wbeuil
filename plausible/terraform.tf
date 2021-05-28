@@ -63,11 +63,21 @@ resource "aws_security_group_rule" "i_ssh" {
 
 resource "aws_security_group_rule" "i_http" {
   type              = "ingress"
-  from_port         = 8000
-  to_port           = 8000
+  from_port         = 80
+  to_port           = 80
   protocol          = "tcp"
   cidr_blocks       = ["0.0.0.0/0"]
   description       = "HTTP"
+  security_group_id = aws_default_security_group.sg.id
+}
+
+resource "aws_security_group_rule" "i_https" {
+  type              = "ingress"
+  from_port         = 443
+  to_port           = 443
+  protocol          = "tcp"
+  cidr_blocks       = ["0.0.0.0/0"]
+  description       = "HTTPS"
   security_group_id = aws_default_security_group.sg.id
 }
 
