@@ -3,6 +3,7 @@ terraform {
     bucket = "wbeuil-tf-backend"
     key    = "wbeuil.com/terraform.tfstate"
     region = "eu-west-3"
+    encrypt = true
   }
 }
 
@@ -13,6 +14,16 @@ provider "aws" {
 
 resource "aws_s3_bucket" "backend_bucket" {
   bucket = "wbeuil-tf-backend"
+  versioning {
+    enabled = true
+  }
+  server_side_encryption_configuration {
+    rule {
+      apply_server_side_encryption_by_default {
+        sse_algorithm     = "AES256"
+      }
+    }
+  }
 }
 
 resource "aws_route53_zone" "wbeuil_zone" {

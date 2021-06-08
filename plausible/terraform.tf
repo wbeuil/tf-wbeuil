@@ -3,6 +3,7 @@ terraform {
     bucket = "wbeuil-tf-backend"
     key    = "plausible/terraform.tfstate"
     region = "eu-west-3"
+    encrypt = true
   }
 }
 
@@ -56,7 +57,7 @@ resource "aws_security_group_rule" "i_ssh" {
   from_port         = 22
   to_port           = 22
   protocol          = "tcp"
-  cidr_blocks       = ["0.0.0.0/0"]
+  cidr_blocks       = ["83.114.0.0/16"]
   description       = "SSH"
   security_group_id = aws_default_security_group.sg.id
 }
