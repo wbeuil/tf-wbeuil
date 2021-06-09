@@ -100,4 +100,11 @@ resource "aws_instance" "instance" {
   key_name                    = "plausible"
   user_data                   = file("script.sh")
   tags                        = local.tags
+  root_block_device {
+    volume_size = 8
+    volume_type = "gp2"
+    encrypted   = true
+    delete_on_termination = false
+    tags        = local.tags
+  }
 }
