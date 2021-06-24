@@ -1,8 +1,8 @@
 terraform {
   backend "s3" {
-    bucket = "wbeuil-tf-backend"
-    key    = "plausible/terraform.tfstate"
-    region = "eu-west-3"
+    bucket  = "wbeuil-tf-backend"
+    key     = "plausible/terraform.tfstate"
+    region  = "eu-west-3"
     encrypt = true
   }
 }
@@ -10,6 +10,9 @@ terraform {
 provider "aws" {
   region  = "eu-west-3"
   profile = "will"
+  default_tags {
+    tags = local.tags
+  }
 }
 
 locals {
@@ -22,23 +25,19 @@ locals {
 
 resource "aws_vpc" "vpc" {
   cidr_block = "10.0.0.0/16"
-  tags       = local.tags
 }
 
 resource "aws_subnet" "subnet" {
   vpc_id     = aws_vpc.vpc.id
   cidr_block = "10.0.0.0/24"
-  tags       = local.tags
 }
 
 resource "aws_internet_gateway" "gw" {
   vpc_id = aws_vpc.vpc.id
-  tags   = local.tags
 }
 
 resource "aws_default_route_table" "rt" {
   default_route_table_id = aws_vpc.vpc.default_route_table_id
-  tags                   = local.tags
 }
 
 resource "aws_route" "r" {
@@ -49,7 +48,6 @@ resource "aws_route" "r" {
 
 resource "aws_default_security_group" "sg" {
   vpc_id = aws_vpc.vpc.id
-  tags   = local.tags
 }
 
 resource "aws_security_group_rule" "i_ssh" {
@@ -57,7 +55,7 @@ resource "aws_security_group_rule" "i_ssh" {
   from_port         = 22
   to_port           = 22
   protocol          = "tcp"
-  cidr_blocks       = ["83.114.0.0/16"]
+  cidr_blocks       = ["90.70.0.0/16"]
   description       = "SSH"
   security_group_id = aws_default_security_group.sg.id
 }
@@ -99,12 +97,11 @@ resource "aws_instance" "instance" {
   associate_public_ip_address = true
   key_name                    = "plausible"
   user_data                   = file("script.sh")
-  tags                        = local.tags
   root_block_device {
-    volume_size = 8
-    volume_type = "gp2"
-    encrypted   = true
+    volume_size           = 8
+    volume_type           = "gp2"
+    encrypted             = true
     delete_on_termination = false
-    tags        = local.tags
+    tags                  = local.tags
   }
 }

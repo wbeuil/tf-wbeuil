@@ -1,8 +1,8 @@
 terraform {
   backend "s3" {
-    bucket = "wbeuil-tf-backend"
-    key    = "wbeuil.com/terraform.tfstate"
-    region = "eu-west-3"
+    bucket  = "wbeuil-tf-backend"
+    key     = "wbeuil.com/terraform.tfstate"
+    region  = "eu-west-3"
     encrypt = true
   }
 }
@@ -10,6 +10,12 @@ terraform {
 provider "aws" {
   region  = "eu-west-3"
   profile = "will"
+  default_tags {
+    tags = {
+      Name      = "wbeuil.com"
+      Terraform = true
+    }
+  }
 }
 
 resource "aws_s3_bucket" "backend_bucket" {
@@ -20,7 +26,7 @@ resource "aws_s3_bucket" "backend_bucket" {
   server_side_encryption_configuration {
     rule {
       apply_server_side_encryption_by_default {
-        sse_algorithm     = "AES256"
+        sse_algorithm = "AES256"
       }
     }
   }
