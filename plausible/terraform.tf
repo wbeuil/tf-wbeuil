@@ -50,16 +50,6 @@ resource "aws_default_security_group" "sg" {
   vpc_id = aws_vpc.vpc.id
 }
 
-resource "aws_security_group_rule" "i_ssh" {
-  type              = "ingress"
-  from_port         = 22
-  to_port           = 22
-  protocol          = "tcp"
-  cidr_blocks       = ["90.70.0.0/16"]
-  description       = "SSH"
-  security_group_id = aws_default_security_group.sg.id
-}
-
 resource "aws_security_group_rule" "i_http" {
   type              = "ingress"
   from_port         = 80
@@ -97,6 +87,10 @@ resource "aws_instance" "instance" {
   associate_public_ip_address = true
   key_name                    = "plausible"
   user_data                   = file("script.sh")
+  disable_api_termination     = true
+  metadata_options {
+    http_endpoint = "disabled"
+  }
   root_block_device {
     volume_size           = 8
     volume_type           = "gp2"
