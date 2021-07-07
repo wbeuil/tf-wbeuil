@@ -80,3 +80,11 @@ resource "aws_route53_record" "a_record_plausible" {
   zone_id = aws_route53_zone.wbeuil_zone.zone_id
   records = ["13.36.170.166"]
 }
+
+resource "aws_route53_record" "a_record_vitals" {
+  name    = "vitals"
+  type    = "A"
+  ttl     = 300
+  zone_id = aws_route53_zone.wbeuil_zone.zone_id
+  records = ["107.191.62.254"]
+}
